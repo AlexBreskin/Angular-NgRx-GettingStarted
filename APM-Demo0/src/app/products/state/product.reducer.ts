@@ -1,6 +1,5 @@
 import { createFeatureSelector, createReducer, createSelector, on } from "@ngrx/store";
 import { Product } from "../product";
-import { ProductData } from "../product-data";
 import * as AppState from '../../state/app.state'
 import * as ProductActions from "./product.actions";
 
