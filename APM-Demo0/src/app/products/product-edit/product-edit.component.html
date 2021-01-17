@@ -1,11 +1,11 @@
 <div class="card"
-     *ngIf="product$ | async as product">
+     *ngIf="selectedProduct">
   <div class="card-header">
     {{pageTitle}}
   </div>
   <div class="card-body">
     <form novalidate
-          (ngSubmit)="saveProduct(product)"
+          (ngSubmit)="saveProduct()"
           [formGroup]="productForm">
       <fieldset>
         <div class="form-group row">
@@ -97,7 +97,7 @@
               <button class="btn btn-light"
                       type="button"
                       style="width:80px;margin-right:10px"
-                      (click)="cancelEdit(product)">
+                      (click)="cancelEdit()">
                 Cancel
               </button>
             </span>
@@ -105,7 +105,7 @@
               <button class="btn btn-light"
                       type="button"
                       style="width:80px"
-                      (click)="deleteProduct(product)">
+                      (click)="deleteProduct()">
                 Delete
               </button>
             </span>

@@ -10,7 +10,12 @@
     </pm-product-list>
   </div>
   <div class='col-md-8'>
-    <pm-product-edit>
+    <pm-product-edit [errorMessage]="errorMessage$ | async"
+                    [selectedProduct]="selectedProduct$ | async"
+                    (clearCurrent)="clearCurrent()"
+                    (update)="updateProduct($any($event))"
+                    (delete)="deleteProduct($any($event))"
+                    (create)="createProduct($any($event))">
     </pm-product-edit>
   </div>
 </div>
