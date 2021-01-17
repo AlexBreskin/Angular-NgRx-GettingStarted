@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 import { Product } from '../product';
-import { ProductService } from '../product.service';
 import * as ProductActions from '../state/product.actions';
-import { getCurrentProduct, getShowProductCode, State } from '../state/product.reducer';
+import { getCurrentProduct, getError, getProducts, getShowProductCode, State } from '../state/product.reducer';
 
 @Component({
   selector: 'pm-product-list',
@@ -12,32 +12,25 @@ import { getCurrentProduct, getShowProductCode, State } from '../state/product.r
 })
 export class ProductListComponent implements OnInit {
   pageTitle = 'Products';
-  errorMessage: string;
 
-  displayCode: boolean;
+  products$: Observable<Product[]>;
+  selectedProduct$: Observable<Product>;
+  displayCode$: any;
+  errorMessage$: Observable<string>;
 
-  products: Product[];
-
-  // Used to highlight the selected product in the list
-  selectedProduct: Product | null;
-
-  constructor(private store: Store<State>, private productService: ProductService) { }
+  constructor(private store: Store<State>) { }
 
   ngOnInit(): void {
     // TODO: Unsubscribe
-    this.store.select(getCurrentProduct).subscribe(
-      currentProduct => this.selectedProduct = currentProduct
-    );
+    this.selectedProduct$ = this.store.select(getCurrentProduct);
 
-    this.productService.getProducts().subscribe({
-      next: (products: Product[]) => this.products = products,
-      error: err => this.errorMessage = err
-    });
+    this.products$ = this.store.select(getProducts);
 
-    // TODO: Unsubscribe
-    this.store.select(getShowProductCode).subscribe(
-      showProductCode =>  this.displayCode = showProductCode
-    )
+    this.store.dispatch(ProductActions.loadProducts());
+
+    this.displayCode$ =this.store.select(getShowProductCode);
+
+    this.errorMessage$ = this.store.select(getError)
   }
 
   checkChanged(): void {
