@@ -123,4 +123,34 @@ export const productReducer = createReducer<ProductState>(
             error: action.error
         }
     }),
+    on(ProductActions.createProductSuccess, (state, action): ProductState => {
+        const newProducts = state.products.concat(action.product);
+        return {
+            ...state,
+            products: newProducts,
+            currentProductId: action.product.id,
+            error: ''
+        }
+    }),
+    on(ProductActions.createProductFailure, (state, action): ProductState => {
+        return {
+            ...state,
+            error: action.error
+        }
+    }),
+    on(ProductActions.deleteProductSuccess, (state, action): ProductState => {
+        const filteredProducts = state.products.filter(item => item.id !== action.productId );
+        return {
+            ...state,
+            products: filteredProducts,
+            currentProductId: null,
+            error: ''
+        }
+    }),
+    on(ProductActions.deleteProductFailure, (state, action): ProductState => {
+        return {
+            ...state,
+            error: action.error
+        }
+    }),
 );

@@ -32,4 +32,30 @@ export class ProductEffects {
             )
         )
     });
+    
+    addProduct$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(ProductActions.createProduct),
+            concatMap( action => 
+                this.productService.createProduct(action.product)
+                .pipe(
+                    map(product => ProductActions.createProductSuccess({ product })),
+                    catchError(error => of(ProductActions.createProductFailure({ error })))
+                )
+            )
+        )
+    });
+    
+    deleteProduct$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(ProductActions.deleteProduct),
+            mergeMap( action => 
+                this.productService.deleteProduct(action.product.id)
+                .pipe(
+                    map(productId => ProductActions.deleteProductSuccess({ productId })),
+                    catchError(error => of(ProductActions.deleteProductFailure({ error })))
+                )
+            )
+        )
+    });
 }
